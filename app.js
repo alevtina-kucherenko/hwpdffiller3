@@ -12,7 +12,7 @@ GAME RULES:
 const RESET_VALUE = 2;
 const DEFAULT_GAME_LIMIT = 100;
 
-let scores = [0, 0];
+let players;
 let activePlayer = 0;
 let current = 0;
 let limit = DEFAULT_GAME_LIMIT;
@@ -35,7 +35,8 @@ const initGame = () => {
   resetGameLimit();
   isFirstRoll = true;
   current = 0;
-  scores = [0, 0];
+
+  players = generatePlayers();
 }
 
 initGame();
@@ -58,8 +59,8 @@ document.querySelector('.btn-roll').addEventListener('click', function() {
     current += dice1 + dice2;
     document.getElementById('current-'+activePlayer).textContent = current;
 
-    if (scores[activePlayer] + current >= limit) {
-      alert(`Player ${activePlayer} won!!!`);
+    if (players[activePlayer].getScore() + current >= limit) {
+      alert(`Player ${players[activePlayer].name} won!!!`);
     }
 
   } else {
@@ -78,8 +79,9 @@ const changePlayer = () => {
 }
 
 document.querySelector('.btn-hold').addEventListener('click', function() {
-  scores[activePlayer] += current;
-  document.querySelector(`#score-${activePlayer}`).textContent = scores[activePlayer];
+  const newScore = players[activePlayer].getScore() + current;
+  players[activePlayer].setScore(newScore);
+  document.querySelector(`#score-${activePlayer}`).textContent = players[activePlayer].getScore();
   changePlayer();
 });
 
@@ -107,4 +109,42 @@ function setGameLimit() {
   limitInput.value = 'Лимит игры: ' + limit;
   limitContainer.classList.add('disabled');
   limitInput.setAttribute('disabled', 'true');
+}
+
+function Gamer(name) {
+  this.name = name;
+  this.score = 0;
+}
+
+Gamer.prototype.getScore = function () {
+  return this.score;
+};
+Gamer.prototype.setScore = function (score) {
+  this.score = score;
+};
+Gamer.prototype.resetScore = function () {
+  this.score = 0;
+};
+
+function generatePlayers() {
+  let playerNames = getPlayerNames();
+  return [new Gamer(playerNames[0]), new Gamer(playerNames[1])];
+}
+
+
+function getPlayerNames() {
+  let player1 = prompt('Введите имя первого игрока:', 'игрок 1');
+  let player2 = prompt('Введите имя второго игрока:', 'игрок 2');
+
+  if (player1 === null) {
+    player1 = 'игрок 1';
+  }
+  if (player2 === null) {
+    player2 = 'игрок 2';
+  }
+
+  document.getElementById('name-0').innerHTML = player1;
+  document.getElementById('name-1').innerHTML = player2;
+
+  return [player1, player2];
 }

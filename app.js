@@ -10,13 +10,19 @@ GAME RULES:
 */
 
 const RESET_VALUE = 2;
+const DEFAULT_GAME_LIMIT = 100;
 
 let scores = [0, 0];
 let activePlayer = 0;
 let current = 0;
+let limit = DEFAULT_GAME_LIMIT;
+let isFirstRoll = true;
 
 const diceElement1 = document.querySelector('#dice1');
 const diceElement2 = document.querySelector('#dice2');
+
+const limitContainer = document.querySelector('.limit-container');
+const limitInput = document.querySelector('#limit');
 
 const initGame = () => {
   document.querySelector('#current-0').textContent = 0;
@@ -25,6 +31,11 @@ const initGame = () => {
   document.querySelector('#score-1').textContent = 0;
   diceElement1.style.display = 'none';
   diceElement2.style.display = 'none';
+
+  resetGameLimit();
+  isFirstRoll = true;
+  current = 0;
+  scores = [0, 0];
 }
 
 initGame();
@@ -32,6 +43,11 @@ initGame();
 document.querySelector('.btn-roll').addEventListener('click', function() {
   const dice1 = generateDiceValue();
   const dice2 = generateDiceValue();
+
+  if (isFirstRoll) {
+    setGameLimit();
+    isFirstRoll = false;
+  }
 
   diceElement1.src = `dice-${dice1}.png`;
   diceElement2.src = `dice-${dice2}.png`;
@@ -42,10 +58,10 @@ document.querySelector('.btn-roll').addEventListener('click', function() {
     current += dice1 + dice2;
     document.getElementById('current-'+activePlayer).textContent = current;
 
-    if (scores[activePlayer] + current >= 20) {
+    if (scores[activePlayer] + current >= limit) {
       alert(`Player ${activePlayer} won!!!`);
     }
-    
+
   } else {
     changePlayer();
   }
@@ -74,4 +90,21 @@ document.querySelector('.btn-new').addEventListener('click', function() {
 
 function generateDiceValue() {
   return Math.floor(Math.random() * 6) + 1;
+}
+
+function resetGameLimit() {
+  limit = DEFAULT_GAME_LIMIT;
+  limitInput.value = limit;
+  limitContainer.classList.remove('disabled');
+  limitInput.removeAttribute('disabled');
+}
+
+function setGameLimit() {
+  if (limitInput.value) {
+    limit = limitInput.value;
+  }
+
+  limitInput.value = 'Лимит игры: ' + limit;
+  limitContainer.classList.add('disabled');
+  limitInput.setAttribute('disabled', 'true');
 }

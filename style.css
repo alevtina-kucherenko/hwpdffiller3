@@ -151,5 +151,36 @@ i {
     top: 275px;
 }
 
+.limit-container{
+    position: absolute;
+    right: 3%;
+    bottom: 4%;
+}
+
+.limit-container.disabled label {
+    display: none;
+}
+
+label{
+    display: block;
+    color: #555;
+    font-family: Lato;
+    font-size: 15px;
+    font-weight: 300;
+
+}
+#limit{
+    width: 160px;
+    height: 20px;
+    color: #555;
+    background: none;
+    border: 1px solid #555;
+    font-family: Lato;
+    font-size: 12px;
+    text-transform: uppercase;
+    font-weight: 300;
+    vertical-align: text-top;
+}
+
 .winner { background-color: #f7f7f7; }
 .winner .player-name { font-weight: 300; color: #EB4D4D; }

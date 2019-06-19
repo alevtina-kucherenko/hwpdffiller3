@@ -11,6 +11,7 @@ GAME RULES:
 
 const RESET_VALUE = 2;
 const DEFAULT_GAME_LIMIT = 100;
+const STORAGE_KEY = 'players';
 
 let players;
 let activePlayer = 0;
@@ -59,7 +60,11 @@ document.querySelector('.btn-roll').addEventListener('click', function() {
     current += dice1 + dice2;
     document.getElementById('current-'+activePlayer).textContent = current;
 
-    if (players[activePlayer].getScore() + current >= limit) {
+    const newPlayerScore = players[activePlayer].getScore() + current;
+
+    if (newPlayerScore >= limit) {
+      players[activePlayer].setScore(newPlayerScore);
+      updateStorage();
       alert(`Player ${players[activePlayer].name} won!!!`);
     }
 
@@ -88,6 +93,24 @@ document.querySelector('.btn-hold').addEventListener('click', function() {
 
 document.querySelector('.btn-new').addEventListener('click', function() {
   initGame();
+});
+
+document.querySelector('.btn-list').addEventListener('click', function () {
+  const object = getDataFromLocalStorage();
+  const sortedPlayers = Object
+    .entries(object)
+    .sort(function (a, b) {
+      return a[1] - b[1];
+    })
+    .reverse();
+
+  let message = '';
+
+  for(let player of sortedPlayers) {
+    message += `${player[0]} - ${player[1]}\n`
+  }
+
+  alert(message);
 });
 
 function generateDiceValue() {
@@ -134,17 +157,54 @@ function generatePlayers() {
 
 function getPlayerNames() {
   let player1 = prompt('Введите имя первого игрока:', 'игрок 1');
-  let player2 = prompt('Введите имя второго игрока:', 'игрок 2');
+  player1 = checkPlayerName(player1, 'игрок 1');
 
-  if (player1 === null) {
-    player1 = 'игрок 1';
-  }
-  if (player2 === null) {
-    player2 = 'игрок 2';
-  }
+  let player2 = prompt('Введите имя второго игрока:', 'игрок 2');
+  player2 = checkPlayerName(player2, 'игрок 2');
 
   document.getElementById('name-0').innerHTML = player1;
   document.getElementById('name-1').innerHTML = player2;
 
   return [player1, player2];
+}
+
+function checkPlayerName(playerName, defaultName) {
+  const playersFromStorage = getDataFromLocalStorage();
+
+  if (!playerName) {
+    playerName = defaultName;
+  }
+
+  if (playersFromStorage[playerName]) {
+    const useExistingName = confirm(`Игрок с именем ${playerName} уже существует. Вы можете продолжить нажав OK или использовать стандартное имя игрока нажав Cancel.`);
+
+    return useExistingName ? playerName : defaultName;
+  } else {
+    return playerName;
+  }
+}
+
+function updateStorage() {
+  const playerName = players[activePlayer].name;
+  let playersObject = getDataFromLocalStorage();
+
+  if (playersObject) {
+    playersObject[playerName] = playersObject[playerName] ? playersObject[playerName] + 1 : 1;
+  } else {
+    playersObject = {
+      [playerName]: 1
+    };
+  }
+
+  setDataToLocalStorage(playersObject);
+}
+
+function getDataFromLocalStorage() {
+  const string = localStorage.getItem(STORAGE_KEY);
+  return string ? JSON.parse(string) : undefined;
+}
+
+function setDataToLocalStorage(object) {
+  const string = JSON.stringify(object);
+  localStorage.setItem(STORAGE_KEY, string);
 }

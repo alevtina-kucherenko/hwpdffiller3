@@ -136,14 +136,51 @@ i {
 .btn-new { top: 45px;}
 .btn-roll { top: 403px;}
 .btn-hold { top: 467px;}
+.btn-list { width: 300px; top: 531px; }
 
 .dice {
     position: absolute;
     left: 50%;
-    top: 178px;
     transform: translateX(-50%);
     height: 100px;
     box-shadow: 0px 10px 60px rgba(0, 0, 0, 0.10);
+}
+#dice1{
+    top: 125px;
+}
+#dice2{
+    top: 275px;
+}
+
+.limit-container{
+    position: absolute;
+    right: 3%;
+    bottom: 4%;
+}
+
+.limit-container.disabled label {
+    display: none;
+}
+
+label{
+    display: block;
+    color: #555;
+    font-family: Lato;
+    font-size: 15px;
+    font-weight: 300;
+
+}
+#limit{
+    width: 160px;
+    height: 20px;
+    color: #555;
+    background: none;
+    border: 1px solid #555;
+    font-family: Lato;
+    font-size: 12px;
+    text-transform: uppercase;
+    font-weight: 300;
+    vertical-align: text-top;
 }
 
 .winner { background-color: #f7f7f7; }

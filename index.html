@@ -32,8 +32,14 @@
             <button class="btn-new"><i class="ion-ios-plus-outline"></i>Новая игра</button>
             <button class="btn-roll"><i class="ion-ios-loop"></i>Бросок</button>
             <button class="btn-hold"><i class="ion-ios-download-outline"></i>Сохранить</button>
-            
-            <img src="dice-5.png" alt="Dice" class="dice">
+            <button class="btn-list"><i class="ion-ios-list-outline"></i>Список победителей</button>
+
+            <img src="dice-5.png" alt="Dice" class="dice" id="dice1">
+            <img src="dice-5.png" alt="Dice" class="dice" id="dice2">
+            <div class="limit-container">
+                <label for="limit">Введите лимит игры:</label>
+                <input id="limit" type="text" placeholder="100" value="">
+            </div>
         </div>
         
         <script src="app.js"></script>

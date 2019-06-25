@@ -8,10 +8,30 @@ GAME RULES:
 - The first player to reach 100 points on GLOBAL score wins the game
 
 */
+import Gamer from './modules/gamer';
+import {updateStorage, getDataFromLocalStorage, setDataToLocalStorage} from  './modules/storage';
+import {generateDiceValue} from './modules/utils';
+import './style.css';
 
+import img1 from './assets/dice-1.png';
+import img2 from './assets/dice-2.png';
+import img3 from './assets/dice-3.png';
+import img4 from './assets/dice-4.png';
+import img5 from './assets/dice-5.png';
+import img6 from './assets/dice-6.png';
+
+
+const imageMap = [
+  img1,
+  img2,
+  img3,
+  img4,
+  img5,
+  img6,
+];
 const RESET_VALUE = 2;
 const DEFAULT_GAME_LIMIT = 100;
-const STORAGE_KEY = 'players';
+
 
 let players;
 let activePlayer = 0;
@@ -51,8 +71,8 @@ document.querySelector('.btn-roll').addEventListener('click', function() {
     isFirstRoll = false;
   }
 
-  diceElement1.src = `dice-${dice1}.png`;
-  diceElement2.src = `dice-${dice2}.png`;
+  diceElement1.src = imageMap[dice1-1];
+  diceElement2.src = imageMap[dice2-1];
   diceElement1.style.display = 'block';
   diceElement2.style.display = 'block';
 
@@ -64,7 +84,7 @@ document.querySelector('.btn-roll').addEventListener('click', function() {
 
     if (newPlayerScore >= limit) {
       players[activePlayer].setScore(newPlayerScore);
-      updateStorage();
+      updateStorage(players, activePlayer);
       alert(`Player ${players[activePlayer].name} won!!!`);
     }
 
@@ -113,10 +133,6 @@ document.querySelector('.btn-list').addEventListener('click', function () {
   alert(message);
 });
 
-function generateDiceValue() {
-  return Math.floor(Math.random() * 6) + 1;
-}
-
 function resetGameLimit() {
   limit = DEFAULT_GAME_LIMIT;
   limitInput.value = limit;
@@ -134,20 +150,7 @@ function setGameLimit() {
   limitInput.setAttribute('disabled', 'true');
 }
 
-function Gamer(name) {
-  this.name = name;
-  this.score = 0;
-}
 
-Gamer.prototype.getScore = function () {
-  return this.score;
-};
-Gamer.prototype.setScore = function (score) {
-  this.score = score;
-};
-Gamer.prototype.resetScore = function () {
-  this.score = 0;
-};
 
 function generatePlayers() {
   let playerNames = getPlayerNames();
@@ -182,29 +185,4 @@ function checkPlayerName(playerName, defaultName) {
   } else {
     return playerName;
   }
-}
-
-function updateStorage() {
-  const playerName = players[activePlayer].name;
-  let playersObject = getDataFromLocalStorage();
-
-  if (playersObject) {
-    playersObject[playerName] = playersObject[playerName] ? playersObject[playerName] + 1 : 1;
-  } else {
-    playersObject = {
-      [playerName]: 1
-    };
-  }
-
-  setDataToLocalStorage(playersObject);
-}
-
-function getDataFromLocalStorage() {
-  const string = localStorage.getItem(STORAGE_KEY);
-  return string ? JSON.parse(string) : undefined;
-}
-
-function setDataToLocalStorage(object) {
-  const string = JSON.stringify(object);
-  localStorage.setItem(STORAGE_KEY, string);
 }

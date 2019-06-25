@@ -1,0 +1,32 @@
+{
+  "name": "hwpdffiller3",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "webpack --mode=production",
+    "dev": "webpack-dev-server",
+    "watch": "webpack --watch --mode=development"
+  },
+  "devDependencies": {
+    "css-loader": "^3.0.0",
+    "file-loader": "^4.0.0",
+    "html-webpack-plugin": "^3.2.0",
+    "style-loader": "^0.23.1",
+    "webpack": "^4.35.0",
+    "webpack-cli": "^3.3.4",
+    "webpack-dev-server": "^3.7.2"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/alevtina-kucherenko/hwpdffiller3.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/alevtina-kucherenko/hwpdffiller3/issues"
+  },
+  "homepage": "https://github.com/alevtina-kucherenko/hwpdffiller3#readme"
+}
